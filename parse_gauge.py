@@ -23,7 +23,10 @@ current_block = json.loads(Web3.to_json(web3.eth.get_block("latest")))["number"]
 lp_total_supply = lp_contract.total_supply(block_identifier=block)
 lp_gauge_supply = lp_contract.balanceOf(gauge, block_identifier=block)
 balances = pool_contract.balances(block_identifier=block)
-balances = balances[0] * lp_gauge_supply / lp_total_supply, balances[1] * lp_gauge_supply / lp_total_supply
+balances = (
+    balances[0] * lp_gauge_supply / lp_total_supply,
+    balances[1] * lp_gauge_supply / lp_total_supply,
+)
 
 eth_per_lp, crv_per_lp = balances[0] / lp_gauge_supply, balances[1] / lp_gauge_supply
 

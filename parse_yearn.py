@@ -3,16 +3,16 @@ import json
 
 from web3 import Web3
 
-from contract.erc20 import ERC20Contract
+from contract.erc20 import ERC20Contract, YERC20Contract
 from contract.pool_contract import PoolContract
-from settings import web3_provider,settings
+from settings import web3_provider, settings
 
 lp = "0xEd4064f376cB8d68F770FB1Ff088a3d0F3FF5c4d"
 lp_contract = ERC20Contract(lp)
 gauge = "0x1cEBdB0856dd985fAe9b8fEa2262469360B8a3a6"
 gauge_contract = ERC20Contract(gauge)
 yearn_addr = "0x6f0Ace0F94f4B9890Dfa99A4175B3Ef0288C16B3"
-yearn_contract = ERC20Contract(yearn_addr)
+yearn_contract = YERC20Contract(yearn_addr)
 pool = "0x8301AE4fc9c624d1D396cbDAa1ed877821D7C511"
 pool_contract = PoolContract(pool)
 start_block = 13676983
@@ -30,9 +30,13 @@ current_block = json.loads(Web3.to_json(web3.eth.get_block("latest")))["number"]
 lp_total_supply = lp_contract.total_supply(block_identifier=block)
 lp_yearn_supply = gauge_contract.balanceOf(ycrv, block_identifier=block)
 balances = pool_contract.balances(block_identifier=block)
-balances = balances[0] * lp_yearn_supply / lp_total_supply, balances[1] * lp_yearn_supply / lp_total_supply
+balances = (
+    balances[0] * lp_yearn_supply / lp_total_supply,
+    balances[1] * lp_yearn_supply / lp_total_supply,
+)
+price_per_share = yearn_contract.pricePerShare(block_identifier=block) / 10 ** 18
 
-eth_per_lp, crv_per_lp = balances[0] / lp_yearn_supply, balances[1] / lp_yearn_supply
+eth_per_lp, crv_per_lp = price_per_share * balances[0] / lp_yearn_supply, price_per_share * balances[1] / lp_yearn_supply
 
 users = []
 with open("data/crveth/all_users.csv", "r") as file:
@@ -41,10 +45,10 @@ with open("data/crveth/all_users.csv", "r") as file:
         users.append(row[0])
 
 user_balances_convex = []
-sum_convex = 0
+sum_yearn = 0
 
 for user in users:
-    balance = yearn_contract.balanceOf(user, block_identifier=block)
+    balance = int(yearn_contract.balanceOf(user, block_identifier=block) * price_per_share)
     if balance > 0:
         code = web3.eth.get_code(user, block_identifier=block)
         events = pool_contract.get_liquidity_change_logs(
@@ -78,7 +82,7 @@ for user in users:
         )
         print(user, balance, bool(code), withdrawn_eth, withdrawn_crv)
 
-    sum_convex += balance
+    sum_yearn += balance
 
 user_balances_convex = sorted(
     user_balances_convex, key=lambda x: x["balance"], reverse=True
@@ -114,7 +118,7 @@ for user in user_balances_convex:
     )
 
 print(
-    sum_convex,
+    sum_yearn,
     current_block,
 )
 with open("data/crveth/yearn_snapshot.csv", "w", newline="") as file:
@@ -139,7 +143,7 @@ with open("data/crveth/yearn_overall.csv", "w", newline="") as file:
                 balances[1],
                 eth_per_lp,
                 crv_per_lp,
-                sum_convex,
+                sum_yearn,
             ],
         ]
     )

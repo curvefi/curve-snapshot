@@ -5,7 +5,7 @@ from web3 import Web3
 
 from contract.erc20 import ERC20Contract
 from contract.pool_contract import PoolContract
-from settings import web3_provider,settings
+from settings import web3_provider, settings
 
 lp = "0xEd4064f376cB8d68F770FB1Ff088a3d0F3FF5c4d"
 lp_contract = ERC20Contract(lp)
@@ -30,7 +30,10 @@ current_block = json.loads(Web3.to_json(web3.eth.get_block("latest")))["number"]
 lp_total_supply = lp_contract.total_supply(block_identifier=block)
 lp_convex_supply = gauge_contract.balanceOf(convex, block_identifier=block)
 balances = pool_contract.balances(block_identifier=block)
-balances = balances[0] * lp_convex_supply / lp_total_supply, balances[1] * lp_convex_supply / lp_total_supply
+balances = (
+    balances[0] * lp_convex_supply / lp_total_supply,
+    balances[1] * lp_convex_supply / lp_total_supply,
+)
 
 eth_per_lp, crv_per_lp = balances[0] / lp_convex_supply, balances[1] / lp_convex_supply
 

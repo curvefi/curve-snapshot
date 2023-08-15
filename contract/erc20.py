@@ -72,14 +72,14 @@ class ERC20Contract(Contract):
         decimals = self.contract.functions.decimals().call()
         return 10**decimals
 
-    def total_supply(self, block_identifier: BlockIdentifier = "latest") -> float:
+    def total_supply(self, block_identifier: BlockIdentifier = "latest") -> int:
         return self.contract.functions.totalSupply().call(
             block_identifier=block_identifier
         )
 
     def balanceOf(
         self, address: str, block_identifier: BlockIdentifier = "latest"
-    ) -> float:
+    ) -> int:
         return self.contract.functions.balanceOf(address).call(
             block_identifier=block_identifier
         )
@@ -108,4 +108,23 @@ class ERC20Contract(Contract):
             self.transfer_event.get_logs(
                 argument_filters=argument_filters, fromBlock=fromBlock, toBlock=toBlock
             )
+        )
+
+
+class YERC20Contract(ERC20Contract):
+    @property
+    def abi(self) -> list[dict]:
+        return super().abi + [
+            {
+                "stateMutability": "view",
+                "type": "function",
+                "name": "pricePerShare",
+                "inputs": [],
+                "outputs": [{"name": "", "type": "uint256"}],
+            }
+        ]
+
+    def pricePerShare(self, block_identifier: BlockIdentifier = "latest") -> float:
+        return self.contract.functions.pricePerShare().call(
+            block_identifier=block_identifier
         )
