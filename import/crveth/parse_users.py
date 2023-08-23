@@ -1,10 +1,11 @@
 import csv
 import json
+from pathlib import Path
 
 from web3 import Web3
 
 from contract.erc20 import ERC20Contract
-from settings import web3_provider
+from settings import BASE_DIR, web3_provider
 
 lp = "0xEd4064f376cB8d68F770FB1Ff088a3d0F3FF5c4d"
 lp_contract = ERC20Contract(lp)
@@ -47,6 +48,6 @@ for i in range((block - start_block) // 1000 + 1):
         users.add(event["args"]["_to"])
 
 
-with open("data/crveth/all_users.csv", "w", newline="") as file:
+with open(Path(BASE_DIR, "data", "crveth", "all_users.csv"), "w", newline="") as file:
     writer = csv.writer(file)
     writer.writerows([[u] for u in users])

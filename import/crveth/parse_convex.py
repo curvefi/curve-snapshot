@@ -1,11 +1,12 @@
 import csv
 import json
+from pathlib import Path
 
 from web3 import Web3
 
 from contract.erc20 import ERC20Contract
 from contract.pool_contract import PoolContract
-from settings import web3_provider, settings
+from settings import BASE_DIR, settings, web3_provider
 
 lp = "0xEd4064f376cB8d68F770FB1Ff088a3d0F3FF5c4d"
 lp_contract = ERC20Contract(lp)
@@ -38,7 +39,7 @@ balances = (
 eth_per_lp, crv_per_lp = balances[0] / lp_convex_supply, balances[1] / lp_convex_supply
 
 users = []
-with open("data/crveth/all_users.csv", "r") as file:
+with open(Path(BASE_DIR, "data", "crveth", "all_users.csv"), "r") as file:
     reader = csv.reader(file)
     for row in reader:
         users.append(row[0])
@@ -120,11 +121,15 @@ print(
     sum_convex,
     current_block,
 )
-with open("data/crveth/convex_snapshot.csv", "w", newline="") as file:
+with open(
+    Path(BASE_DIR, "data", "crveth", "convex_snapshot.csv"), "w", newline=""
+) as file:
     writer = csv.writer(file)
     writer.writerows(data)
 
-with open("data/crveth/convex_overall.csv", "w", newline="") as file:
+with open(
+    Path(BASE_DIR, "data", "crveth", "convex_overall.csv"), "w", newline=""
+) as file:
     writer = csv.writer(file)
     writer.writerows(
         [

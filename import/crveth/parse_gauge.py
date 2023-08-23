@@ -1,14 +1,17 @@
 import csv
 import json
+from pathlib import Path
 
 from web3 import Web3
 
 from contract.erc20 import ERC20Contract
 from contract.pool_contract import PoolContract
-from settings import settings, web3_provider
+from settings import BASE_DIR, settings, web3_provider
 
 lp = "0xEd4064f376cB8d68F770FB1Ff088a3d0F3FF5c4d"
 lp_contract = ERC20Contract(lp)
+gauge = "0x1cEBdB0856dd985fAe9b8fEa2262469360B8a3a6"
+gauge_contract = ERC20Contract(gauge)
 pool = "0x8301AE4fc9c624d1D396cbDAa1ed877821D7C511"
 pool_contract = PoolContract(pool)
 start_block = 13676983
@@ -19,13 +22,18 @@ web3 = Web3(web3_provider)
 current_block = json.loads(Web3.to_json(web3.eth.get_block("latest")))["number"]
 
 lp_total_supply = lp_contract.total_supply(block_identifier=block)
+lp_gauge_supply = lp_contract.balanceOf(gauge, block_identifier=block)
 balances = pool_contract.balances(block_identifier=block)
+balances = (
+    balances[0] * lp_gauge_supply / lp_total_supply,
+    balances[1] * lp_gauge_supply / lp_total_supply,
+)
 
-eth_per_lp, crv_per_lp = balances[0] / lp_total_supply, balances[1] / lp_total_supply
+eth_per_lp, crv_per_lp = balances[0] / lp_gauge_supply, balances[1] / lp_gauge_supply
 
 
 users = []
-with open("data/crveth/all_users.csv", "r") as file:
+with open(Path(BASE_DIR, "data", "crveth", "all_users.csv"), "r") as file:
     reader = csv.reader(file)
     for row in reader:
         users.append(row[0])
@@ -34,7 +42,7 @@ with open("data/crveth/all_users.csv", "r") as file:
 user_balances = []
 total_sum = 0
 for user in users:
-    balance = lp_contract.balanceOf(user, block_identifier=block)
+    balance = gauge_contract.balanceOf(user, block_identifier=block)
     if balance > 0:
         code = web3.eth.get_code(user, block_identifier=block)
         events = pool_contract.get_liquidity_change_logs(
@@ -100,15 +108,19 @@ for user in user_balances:
 
 print(
     total_sum,
-    lp_total_supply,
-    total_sum == lp_total_supply,
+    lp_gauge_supply,
+    total_sum == lp_gauge_supply,
     current_block,
 )
-with open("data/crveth/pool_snapshot.csv", "w", newline="") as file:
+with open(
+    Path(BASE_DIR, "data", "crveth", "gauge_snapshot.csv"), "w", newline=""
+) as file:
     writer = csv.writer(file)
     writer.writerows(data)
 
-with open("data/crveth/pool_overall.csv", "w", newline="") as file:
+with open(
+    Path(BASE_DIR, "data", "crveth", "gauge_overall.csv"), "w", newline=""
+) as file:
     writer = csv.writer(file)
     writer.writerows(
         [
@@ -121,7 +133,7 @@ with open("data/crveth/pool_overall.csv", "w", newline="") as file:
                 "Total User Balances",
             ],
             [
-                lp_total_supply,
+                lp_gauge_supply,
                 balances[0],
                 balances[1],
                 eth_per_lp,

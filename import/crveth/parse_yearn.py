@@ -1,11 +1,12 @@
 import csv
 import json
+from pathlib import Path
 
 from web3 import Web3
 
 from contract.erc20 import ERC20Contract, YERC20Contract
 from contract.pool_contract import PoolContract
-from settings import web3_provider, settings
+from settings import BASE_DIR, settings, web3_provider
 
 lp = "0xEd4064f376cB8d68F770FB1Ff088a3d0F3FF5c4d"
 lp_contract = ERC20Contract(lp)
@@ -34,12 +35,15 @@ balances = (
     balances[0] * lp_yearn_supply / lp_total_supply,
     balances[1] * lp_yearn_supply / lp_total_supply,
 )
-price_per_share = yearn_contract.pricePerShare(block_identifier=block) / 10 ** 18
+price_per_share = yearn_contract.pricePerShare(block_identifier=block) / 10**18
 
-eth_per_lp, crv_per_lp = price_per_share * balances[0] / lp_yearn_supply, price_per_share * balances[1] / lp_yearn_supply
+eth_per_lp, crv_per_lp = (
+    price_per_share * balances[0] / lp_yearn_supply,
+    price_per_share * balances[1] / lp_yearn_supply,
+)
 
 users = []
-with open("data/crveth/all_users.csv", "r") as file:
+with open(Path(BASE_DIR, "data", "crveth", "all_users.csv"), "r") as file:
     reader = csv.reader(file)
     for row in reader:
         users.append(row[0])
@@ -48,7 +52,9 @@ user_balances_convex = []
 sum_yearn = 0
 
 for user in users:
-    balance = int(yearn_contract.balanceOf(user, block_identifier=block) * price_per_share)
+    balance = int(
+        yearn_contract.balanceOf(user, block_identifier=block) * price_per_share
+    )
     if balance > 0:
         code = web3.eth.get_code(user, block_identifier=block)
         events = pool_contract.get_liquidity_change_logs(
@@ -121,11 +127,15 @@ print(
     sum_yearn,
     current_block,
 )
-with open("data/crveth/yearn_snapshot.csv", "w", newline="") as file:
+with open(
+    Path(BASE_DIR, "data", "crveth", "yearn_snapshot.csv"), "w", newline=""
+) as file:
     writer = csv.writer(file)
     writer.writerows(data)
 
-with open("data/crveth/yearn_overall.csv", "w", newline="") as file:
+with open(
+    Path(BASE_DIR, "data", "crveth", "yearn_overall.csv"), "w", newline=""
+) as file:
     writer = csv.writer(file)
     writer.writerows(
         [
