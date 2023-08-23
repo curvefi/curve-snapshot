@@ -20,6 +20,8 @@ class Settings(BaseSettings):
         "0x989AEb4d175e16225E39E87d0D97A3360524AD80": "convex",
         "0xF147b8125d2ef93FB6965Db97D6746952a133934": "yCRV",
         "0x52f541764E6e90eeBc5c21Ff570De0e2D63766B6": "stakedao",
+        "0x941C2Acdb6B85574Ffc44419c2AA237a9e67be03": "gauge",
+
     }
 
 
