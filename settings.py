@@ -21,7 +21,8 @@ class Settings(BaseSettings):
         "0xF147b8125d2ef93FB6965Db97D6746952a133934": "yCRV",
         "0x52f541764E6e90eeBc5c21Ff570De0e2D63766B6": "stakedao",
         "0x941C2Acdb6B85574Ffc44419c2AA237a9e67be03": "gauge",
-
+        "0x12dCD9E8D1577b5E4F066d8e7D404404Ef045342": "gauge",
+        "0xe761bf731A06fE8259FeE05897B2687D56933110": "alchemix",
     }
 
 
