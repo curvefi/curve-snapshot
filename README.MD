@@ -2,12 +2,12 @@
 
 ## CRV/ETH
 
-Snapshot is taken for block 17807829 (1 block before first exploit)
+Snapshot is taken for block 17807829
 
 ## alETH/ETH
 
-Snapshot is taken for block 17806740 (1 block before first tx draining pool)
+Snapshot is taken for block 17806740
 
 ## msETH/ETH
 
-Snapshot is taken for block 17806549 (1 block before first tx draining pool)
+Snapshot is taken for block 17806549
