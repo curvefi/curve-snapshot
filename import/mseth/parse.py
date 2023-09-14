@@ -111,9 +111,7 @@ with open(
     writer = csv.writer(file)
     writer.writerows(data)
 
-with open(
-    Path(BASE_DIR, "data", "mseth", "pool_overall.csv"), "w", newline=""
-) as file:
+with open(Path(BASE_DIR, "data", "mseth", "pool_overall.csv"), "w", newline="") as file:
     writer = csv.writer(file)
     writer.writerows(
         [
