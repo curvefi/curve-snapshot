@@ -41,7 +41,7 @@ balances = [
         "withdrawn_eth",
         "withdrawn_crv",
         "eth_to_redeem",
-        "crv_to_redeem",
+        "mseth_to_redeem",
     ]
 ] + balances
 
