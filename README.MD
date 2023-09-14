@@ -1,5 +1,7 @@
 # Snapshot of pools affected in July 2023
 
+## ! Work in progress... This is not final distribution
+
 ## CRV/ETH
 
 Snapshot is taken for block 17807829
