@@ -158,6 +158,31 @@ class ConcERC20Contract(Contract):
                 "inputs": [{"type": "uint256", "name": "_pid"}],
                 "outputs": [{"name": "", "type": "uint256"}],
             },
+            {
+                "name": "Deposit",
+                "type": "event",
+                "anonymous": False,
+                "inputs": [
+                    {
+                        "indexed": True,
+                        "internalType": "uint256",
+                        "name": "_pid",
+                        "type": "uint256",
+                    },
+                    {
+                        "indexed": True,
+                        "internalType": "address",
+                        "name": "_sender",
+                        "type": "address",
+                    },
+                    {
+                        "indexed": False,
+                        "internalType": "uint256",
+                        "name": "_amount",
+                        "type": "uint256",
+                    },
+                ],
+            },
         ]
 
     def getUserShare(
@@ -179,4 +204,27 @@ class ConcERC20Contract(Contract):
     ) -> int:
         return self.contract.functions.getTotalUnderlying(_pid).call(
             block_identifier=block_identifier
+        )
+
+    @cached_property
+    def deposit_event(self) -> ContractEvent:
+        return self.contract.events.Deposit
+
+    def get_deposit_events(
+        self,
+        fromBlock: BlockIdentifier,
+        toBlock: BlockIdentifier,
+        _pid: int = None,
+    ) -> list[EventData]:
+        argument_filters = {}
+        if _pid:
+            argument_filters["_pid"] = _pid
+
+        if not argument_filters:
+            argument_filters = None
+
+        return list(
+            self.deposit_event.get_logs(
+                argument_filters=argument_filters, fromBlock=fromBlock, toBlock=toBlock
+            )
         )
