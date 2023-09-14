@@ -124,7 +124,59 @@ class YERC20Contract(ERC20Contract):
             }
         ]
 
-    def pricePerShare(self, block_identifier: BlockIdentifier = "latest") -> float:
+    def pricePerShare(self, block_identifier: BlockIdentifier = "latest") -> int:
         return self.contract.functions.pricePerShare().call(
+            block_identifier=block_identifier
+        )
+
+
+class ConcERC20Contract(Contract):
+    @property
+    def abi(self) -> list[dict]:
+        return [
+            {
+                "stateMutability": "view",
+                "type": "function",
+                "name": "getUserShare",
+                "inputs": [
+                    {"type": "uint256", "name": "_pid"},
+                    {"type": "address", "name": "_account"},
+                ],
+                "outputs": [{"name": "", "type": "uint256"}],
+            },
+            {
+                "stateMutability": "view",
+                "type": "function",
+                "name": "getTotalShare",
+                "inputs": [{"type": "uint256", "name": "_pid"}],
+                "outputs": [{"name": "", "type": "uint256"}],
+            },
+            {
+                "stateMutability": "view",
+                "type": "function",
+                "name": "getTotalUnderlying",
+                "inputs": [{"type": "uint256", "name": "_pid"}],
+                "outputs": [{"name": "", "type": "uint256"}],
+            },
+        ]
+
+    def getUserShare(
+        self, _pid: int, user: str, block_identifier: BlockIdentifier = "latest"
+    ) -> int:
+        return self.contract.functions.getUserShare(_pid, user).call(
+            block_identifier=block_identifier
+        )
+
+    def getTotalShare(
+        self, _pid: int, block_identifier: BlockIdentifier = "latest"
+    ) -> int:
+        return self.contract.functions.getTotalShare(_pid).call(
+            block_identifier=block_identifier
+        )
+
+    def getTotalUnderlying(
+        self, _pid: int, block_identifier: BlockIdentifier = "latest"
+    ) -> int:
+        return self.contract.functions.getTotalUnderlying(_pid).call(
             block_identifier=block_identifier
         )

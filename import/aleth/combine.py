@@ -8,6 +8,7 @@ exclude = [
     "0x989AEb4d175e16225E39E87d0D97A3360524AD80",  # convex
     "0x718AbE90777F5B778B52D553a5aBaa148DD0dc5D",  # yearn
     "0x5D98cE7d43c47F23f15F2F55c690ACC075658Cb1",  # yearn
+    "0x3Cf54F3A1969be9916DAD548f3C084331C4450b5",  # yearn
 ]
 
 balances = []
@@ -19,6 +20,7 @@ for file in [
     "gauge_snapshot.csv",
     "convex_snapshot.csv",
     "yearn_snapshot.csv",
+    "concentrator_snapshot.csv",
 ]:
     with open(Path(BASE_DIR, "data", "aleth", file), "r") as file:
         reader = csv.reader(file)
@@ -48,6 +50,6 @@ balances = [
     ]
 ] + balances
 
-with open(Path(BASE_DIR, "data", "aleth", "overall_data.csv"), "w", newline="") as file:
+with open(Path(BASE_DIR, "data", "aleth_overall.csv"), "w", newline="") as file:
     writer = csv.writer(file)
     writer.writerows(balances)
