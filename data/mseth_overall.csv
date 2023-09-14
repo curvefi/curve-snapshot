@@ -1,4 +1,4 @@
-User,LP Balance,is_contract,contract_type,events,withdrawn_eth,withdrawn_crv,eth_to_redeem,mseth_to_redeem
+User,LP Balance,is_contract,contract_type,events,withdrawn_eth,withdrawn_mseth,eth_to_redeem,mseth_to_redeem
 0x84119e837dbeF0f4Fb877681687A2869b220533B,751118102075406742403,False,,[],0,0,2.8814166339519172e+20,4.6366366417003355e+20
 0xd1DE3F9CD4AE2F23DA941a67cA4C739f8dD9Af33,450000000000000000000,True,,[],0,0,1.7262764426734453e+20,2.7778407723099754e+20
 0x3F3B9B0F14DEF5817a61437CCB25CcBBD4853fFD,313713495119590678150,False,,[],0,0,1.2034582586082225e+20,1.9365469723712566e+20

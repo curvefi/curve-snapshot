@@ -1,4 +1,4 @@
-User,LP Balance,is_contract,contract_type,events,withdrawn_eth,withdrawn_crv,eth_to_redeem,aleth_to_redeem
+User,LP Balance,is_contract,contract_type,events,withdrawn_eth,withdrawn_aleth,eth_to_redeem,aleth_to_redeem
 0xe761bf731A06fE8259FeE05897B2687D56933110,12989712018134311294233,True,alchemix,"[AttributeDict({'args': AttributeDict({'provider': '0xe761bf731A06fE8259FeE05897B2687D56933110', 'token_amount': 8000000000000000000000, 'coin_index': 8027356430634296017707, 'coin_amount': 16763590359241671361762}), 'event': 'RemoveLiquidityOne', 'logIndex': 2, 'transactionIndex': 0, 'transactionHash': HexBytes('0x20d00acdfbaeffa5fe618ecbcbb8c13df80133cb6d964f9a7ab6a5a7b0d796f3'), 'address': '0xC4C319E2D4d66CcA4464C0c2B32c9Bd23ebe784e', 'blockHash': HexBytes('0x81a5a91e4b6a68e2f2c0f5107b6b25260e174d6750133c61919af21400c8ffad'), 'blockNumber': 17806741})]",0,0,4.418999332103123e+21,8.60139033478289e+21
 0x274d9E726844AB52E351e8F1272e7fc3f58B7E5F,2997865249482777306619,False,,[],0,0,1.0198505183721757e+21,1.9850947539009588e+21
 0xC4e24fF2DEe71Ff59A3BBb84989a1d2d2426b201,1337285447440172929726,False,,[],0,0,4.5493414255985295e+20,8.855095560547923e+20

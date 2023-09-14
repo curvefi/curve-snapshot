@@ -44,7 +44,7 @@ balances = [
         "contract_type",
         "events",
         "withdrawn_eth",
-        "withdrawn_crv",
+        "withdrawn_aleth",
         "eth_to_redeem",
         "aleth_to_redeem",
     ]
