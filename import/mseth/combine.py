@@ -4,11 +4,8 @@ from pathlib import Path
 from settings import BASE_DIR
 
 exclude = [
-    "0x12dCD9E8D1577b5E4F066d8e7D404404Ef045342",  # gauge
+    "0x941C2Acdb6B85574Ffc44419c2AA237a9e67be03",  # gauge
     "0x989AEb4d175e16225E39E87d0D97A3360524AD80",  # convex
-    "0x718AbE90777F5B778B52D553a5aBaa148DD0dc5D",  # yearn
-    "0x5D98cE7d43c47F23f15F2F55c690ACC075658Cb1",  # yearn
-    "0x3Cf54F3A1969be9916DAD548f3C084331C4450b5",  # concentrator
 ]
 
 balances = []
@@ -19,10 +16,8 @@ for file in [
     "pool_snapshot.csv",
     "gauge_snapshot.csv",
     "convex_snapshot.csv",
-    "yearn_snapshot.csv",
-    "concentrator_snapshot.csv",
 ]:
-    with open(Path(BASE_DIR, "data", "aleth", file), "r") as file:
+    with open(Path(BASE_DIR, "data", "mseth", file), "r") as file:
         reader = csv.reader(file)
         is_first = True
         for row in reader:
@@ -33,7 +28,7 @@ for file in [
                 balances.append(row)
                 sum_ += int(row[1])
 
-print(f"Sum of lp of users: {sum_}, total from pool = 24763590359241671361762")
+print(f"Sum of lp of users: {sum_}, total from pool = 2260726276780465996372")
 
 balances = sorted(balances, key=lambda x: int(x[1]), reverse=True)
 balances = [
@@ -50,6 +45,6 @@ balances = [
     ]
 ] + balances
 
-with open(Path(BASE_DIR, "data", "aleth_overall.csv"), "w", newline="") as file:
+with open(Path(BASE_DIR, "data", "mseth_overall.csv"), "w", newline="") as file:
     writer = csv.writer(file)
     writer.writerows(balances)
