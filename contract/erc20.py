@@ -130,6 +130,25 @@ class YERC20Contract(ERC20Contract):
         )
 
 
+class BeefyERC20Contract(ERC20Contract):
+    @property
+    def abi(self) -> list[dict]:
+        return super().abi + [
+            {
+                "stateMutability": "view",
+                "type": "function",
+                "name": "getPricePerFullShare",
+                "inputs": [],
+                "outputs": [{"name": "", "type": "uint256"}],
+            }
+        ]
+
+    def getPricePerFullShare(self, block_identifier: BlockIdentifier = "latest") -> int:
+        return self.contract.functions.getPricePerFullShare().call(
+            block_identifier=block_identifier
+        )
+
+
 class ConcERC20Contract(Contract):
     @property
     def abi(self) -> list[dict]:
