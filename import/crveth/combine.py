@@ -9,6 +9,7 @@ exclude = [
     "0xF147b8125d2ef93FB6965Db97D6746952a133934",  # yearn
     "0x52f541764E6e90eeBc5c21Ff570De0e2D63766B6",  # stakedao
     "0x3Cf54F3A1969be9916DAD548f3C084331C4450b5",  # concentrator
+    "0x4e626f8Cf7529EE986a6825A7F8fB929DB740d96",  # beefy
 ]
 
 balances = []
@@ -22,6 +23,7 @@ for file in [
     "yearn_snapshot.csv",
     "stakedao_snapshot.csv",
     "concentrator_snapshot.csv",
+    "beefy_snapshot.csv",
 ]:
     with open(Path(BASE_DIR, "data", "crveth", file), "r") as file:
         reader = csv.reader(file)
