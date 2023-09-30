@@ -75,12 +75,9 @@ for user in users:
                     withdrawn_crv += event["args"]["token_amounts"][1]
                 elif event["event"] == "RemoveLiquidityOne":
                     if event["args"]["coin_index"] == 0:
-                        withdrawn_eth += event["args"]["token_amount"]
+                        withdrawn_eth += event["args"]["coin_amount"]
                     elif event["args"]["coin_index"] == 1:
-                        withdrawn_crv += event["args"]["token_amount"]
-                elif event["event"] == "AddLiquidity":
-                    withdrawn_eth -= event["args"]["token_amounts"][0]
-                    withdrawn_crv -= event["args"]["token_amounts"][1]
+                        withdrawn_crv += event["args"]["coin_amount"]
 
         user_balances.append(
             {
@@ -122,8 +119,8 @@ for user in user_balances:
             user["events"],
             user["withdrawn_eth"],
             user["withdrawn_crv"],
-            user["balance"] * eth_per_lp - user["withdrawn_eth"],
-            user["balance"] * crv_per_lp - user["withdrawn_crv"],
+            int(user["balance"] * eth_per_lp - user["withdrawn_eth"]),
+            int(user["balance"] * crv_per_lp - user["withdrawn_crv"]),
         ]
     )
 

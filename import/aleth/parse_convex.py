@@ -5,7 +5,7 @@ from pathlib import Path
 from web3 import Web3
 
 from contract.erc20 import ERC20Contract
-from contract.pool_contract import PoolContract
+from contract.pool_contract import AlEthPoolContract
 from settings import BASE_DIR, settings, web3_provider
 
 lp = "0xC4C319E2D4d66CcA4464C0c2B32c9Bd23ebe784e"
@@ -13,7 +13,7 @@ lp_contract = ERC20Contract(lp)
 gauge = "0x12dCD9E8D1577b5E4F066d8e7D404404Ef045342"
 gauge_contract = ERC20Contract(gauge)
 pool = "0xC4C319E2D4d66CcA4464C0c2B32c9Bd23ebe784e"
-pool_contract = PoolContract(pool)
+pool_contract = AlEthPoolContract(pool)
 convex_addr = "0x48Bc302d8295FeA1f8c3e7F57D4dDC9981FEE410"
 convex_contract = ERC20Contract(convex_addr)
 start_block = 13227441
@@ -59,13 +59,11 @@ for user in users:
                     withdrawn_eth += event["args"]["token_amounts"][0]
                     withdrawn_crv += event["args"]["token_amounts"][1]
                 elif event["event"] == "RemoveLiquidityOne":
-                    if event["args"]["coin_index"] == 0:
-                        withdrawn_eth += event["args"]["token_amount"]
-                    elif event["args"]["coin_index"] == 1:
-                        withdrawn_crv += event["args"]["token_amount"]
-                elif event["event"] == "AddLiquidity":
-                    withdrawn_eth -= event["args"]["token_amounts"][0]
-                    withdrawn_crv -= event["args"]["token_amounts"][1]
+                    # we don't have index of coin -> manually update
+                    if user == "0xC53127AF77cBa7D07DC08e271bD0826c55f97467":
+                        withdrawn_eth += event["args"]["coin_amount"]
+                        continue
+                    withdrawn_crv += event["args"]["coin_amount"]
 
         user_balances_convex.append(
             {
@@ -109,8 +107,8 @@ for user in user_balances_convex:
             user["events"],
             user["withdrawn_eth"],
             user["withdrawn_crv"],
-            user["balance"] * eth_per_lp - user["withdrawn_eth"],
-            user["balance"] * crv_per_lp - user["withdrawn_crv"],
+            int(user["balance"] * eth_per_lp - user["withdrawn_eth"]),
+            int(user["balance"] * crv_per_lp - user["withdrawn_crv"]),
         ]
     )
 

@@ -5,7 +5,7 @@ from pathlib import Path
 from web3 import Web3
 
 from contract.erc20 import ERC20Contract, YERC20Contract
-from contract.pool_contract import PoolContract
+from contract.pool_contract import AlEthPoolContract
 from settings import BASE_DIR, settings, web3_provider
 
 lp = "0xC4C319E2D4d66CcA4464C0c2B32c9Bd23ebe784e"
@@ -13,7 +13,7 @@ lp_contract = ERC20Contract(lp)
 convex_addr = "0x48Bc302d8295FeA1f8c3e7F57D4dDC9981FEE410"
 convex_contract = ERC20Contract(convex_addr)
 pool = "0xC4C319E2D4d66CcA4464C0c2B32c9Bd23ebe784e"
-pool_contract = PoolContract(pool)
+pool_contract = AlEthPoolContract(pool)
 yearn_addr = "0x718AbE90777F5B778B52D553a5aBaa148DD0dc5D"
 yearn_contract = YERC20Contract(yearn_addr)
 start_block = 13227441
@@ -67,13 +67,7 @@ for user in users:
                     withdrawn_eth += event["args"]["token_amounts"][0]
                     withdrawn_crv += event["args"]["token_amounts"][1]
                 elif event["event"] == "RemoveLiquidityOne":
-                    if event["args"]["coin_index"] == 0:
-                        withdrawn_eth += event["args"]["token_amount"]
-                    elif event["args"]["coin_index"] == 1:
-                        withdrawn_crv += event["args"]["token_amount"]
-                elif event["event"] == "AddLiquidity":
-                    withdrawn_eth -= event["args"]["token_amounts"][0]
-                    withdrawn_crv -= event["args"]["token_amounts"][1]
+                    withdrawn_crv += event["args"]["coin_amount"]
 
         user_balances.append(
             {
@@ -115,8 +109,8 @@ for user in user_balances:
             user["events"],
             user["withdrawn_eth"],
             user["withdrawn_crv"],
-            user["balance"] * eth_per_lp - user["withdrawn_eth"],
-            user["balance"] * crv_per_lp - user["withdrawn_crv"],
+            int(user["balance"] * eth_per_lp - user["withdrawn_eth"]),
+            int(user["balance"] * crv_per_lp - user["withdrawn_crv"]),
         ]
     )
 

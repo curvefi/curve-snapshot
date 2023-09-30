@@ -110,3 +110,73 @@ class PoolContract(Contract):
             )
         )
         return events
+
+
+class AlEthPoolContract(PoolContract):
+    @property
+    def abi(self) -> list[dict]:
+        return [
+            {
+                "stateMutability": "view",
+                "type": "function",
+                "name": "balances",
+                "inputs": [{"name": "arg0", "type": "uint256"}],
+                "outputs": [{"name": "", "type": "uint256"}],
+            },
+            {
+                "name": "Transfer",
+                "inputs": [
+                    {"name": "sender", "type": "address", "indexed": True},
+                    {"name": "receiver", "type": "address", "indexed": True},
+                    {"name": "value", "type": "uint256", "indexed": False},
+                ],
+                "anonymous": False,
+                "type": "event",
+            },
+            {
+                "name": "TokenExchange",
+                "inputs": [
+                    {"name": "buyer", "type": "address", "indexed": True},
+                    {"name": "sold_id", "type": "int128", "indexed": False},
+                    {"name": "tokens_sold", "type": "uint256", "indexed": False},
+                    {"name": "bought_id", "type": "int128", "indexed": False},
+                    {"name": "tokens_bought", "type": "uint256", "indexed": False},
+                ],
+                "anonymous": False,
+                "type": "event",
+            },
+            {
+                "name": "AddLiquidity",
+                "inputs": [
+                    {"name": "provider", "type": "address", "indexed": True},
+                    {"name": "token_amounts", "type": "uint256[2]", "indexed": False},
+                    {"name": "fees", "type": "uint256[2]", "indexed": False},
+                    {"name": "invariant", "type": "uint256", "indexed": False},
+                    {"name": "token_supply", "type": "uint256", "indexed": False},
+                ],
+                "anonymous": False,
+                "type": "event",
+            },
+            {
+                "name": "RemoveLiquidity",
+                "inputs": [
+                    {"name": "provider", "type": "address", "indexed": True},
+                    {"name": "token_amounts", "type": "uint256[2]", "indexed": False},
+                    {"name": "fees", "type": "uint256[2]", "indexed": False},
+                    {"name": "token_supply", "type": "uint256", "indexed": False},
+                ],
+                "anonymous": False,
+                "type": "event",
+            },
+            {
+                "name": "RemoveLiquidityOne",
+                "inputs": [
+                    {"name": "provider", "type": "address", "indexed": True},
+                    {"name": "token_amount", "type": "uint256", "indexed": False},
+                    {"name": "coin_amount", "type": "uint256", "indexed": False},
+                    {"name": "token_supply", "type": "uint256", "indexed": False},
+                ],
+                "anonymous": False,
+                "type": "event",
+            },
+        ]

@@ -4,8 +4,8 @@ from pathlib import Path
 
 from web3 import Web3
 
-from contract.erc20 import ERC20Contract, BeefyERC20Contract
-from contract.pool_contract import PoolContract
+from contract.erc20 import BeefyERC20Contract, ERC20Contract
+from contract.pool_contract import AlEthPoolContract
 from settings import BASE_DIR, settings, web3_provider
 
 lp = "0xC4C319E2D4d66CcA4464C0c2B32c9Bd23ebe784e"
@@ -13,7 +13,7 @@ lp_contract = ERC20Contract(lp)
 convex_addr = "0x48Bc302d8295FeA1f8c3e7F57D4dDC9981FEE410"
 convex_contract = ERC20Contract(convex_addr)
 pool = "0xC4C319E2D4d66CcA4464C0c2B32c9Bd23ebe784e"
-pool_contract = PoolContract(pool)
+pool_contract = AlEthPoolContract(pool)
 beefy_address = "0xbc0cF20Ac9Fc670fED9B3f230F2E8A2676451e37"
 beefy_contract = BeefyERC20Contract(beefy_address)
 start_block = 13227441
@@ -33,7 +33,7 @@ balances = (
     balances[0] * lp_supply / lp_total_supply,
     balances[1] * lp_supply / lp_total_supply,
 )
-price_per_share = beefy_contract.getPricePerFullShare(block_identifier=block) / 10 ** 18
+price_per_share = beefy_contract.getPricePerFullShare(block_identifier=block) / 10**18
 
 eth_per_lp, crv_per_lp = (
     price_per_share * balances[0] / lp_supply,
@@ -66,13 +66,7 @@ for user in users:
                     withdrawn_eth += event["args"]["token_amounts"][0]
                     withdrawn_crv += event["args"]["token_amounts"][1]
                 elif event["event"] == "RemoveLiquidityOne":
-                    if event["args"]["coin_index"] == 0:
-                        withdrawn_eth += event["args"]["token_amount"]
-                    elif event["args"]["coin_index"] == 1:
-                        withdrawn_crv += event["args"]["token_amount"]
-                elif event["event"] == "AddLiquidity":
-                    withdrawn_eth -= event["args"]["token_amounts"][0]
-                    withdrawn_crv -= event["args"]["token_amounts"][1]
+                    withdrawn_crv += event["args"]["coin_amount"]
 
         user_balances.append(
             {
@@ -114,8 +108,8 @@ for user in user_balances:
             user["events"],
             user["withdrawn_eth"],
             user["withdrawn_crv"],
-            user["balance"] * eth_per_lp - user["withdrawn_eth"],
-            user["balance"] * crv_per_lp - user["withdrawn_crv"],
+            int(user["balance"] * eth_per_lp - user["withdrawn_eth"]),
+            int(user["balance"] * crv_per_lp - user["withdrawn_crv"]),
         ]
     )
 

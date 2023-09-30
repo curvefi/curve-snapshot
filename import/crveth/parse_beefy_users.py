@@ -27,6 +27,8 @@ for i in range((block - start_block) // 1000 + 1):
         users.add(event["args"]["_to"])
 
 
-with open(Path(BASE_DIR, "data", "crveth", "all_users_beefy.csv"), "w", newline="") as file:
+with open(
+    Path(BASE_DIR, "data", "crveth", "all_users_beefy.csv"), "w", newline=""
+) as file:
     writer = csv.writer(file)
     writer.writerows([[u] for u in users])

@@ -4,7 +4,7 @@ from pathlib import Path
 
 from web3 import Web3
 
-from contract.erc20 import ERC20Contract, BeefyERC20Contract
+from contract.erc20 import BeefyERC20Contract, ERC20Contract
 from contract.pool_contract import PoolContract
 from settings import BASE_DIR, settings, web3_provider
 
@@ -34,7 +34,7 @@ balances = (
     balances[0] * lp_supply / lp_total_supply,
     balances[1] * lp_supply / lp_total_supply,
 )
-price_per_share = beefy_contract.getPricePerFullShare(block_identifier=block) / 10 ** 18
+price_per_share = beefy_contract.getPricePerFullShare(block_identifier=block) / 10**18
 
 eth_per_lp, crv_per_lp = (
     price_per_share * balances[0] / lp_supply,
@@ -68,12 +68,9 @@ for user in users:
                     withdrawn_crv += event["args"]["token_amounts"][1]
                 elif event["event"] == "RemoveLiquidityOne":
                     if event["args"]["coin_index"] == 0:
-                        withdrawn_eth += event["args"]["token_amount"]
+                        withdrawn_eth += event["args"]["coin_amount"]
                     elif event["args"]["coin_index"] == 1:
-                        withdrawn_crv += event["args"]["token_amount"]
-                elif event["event"] == "AddLiquidity":
-                    withdrawn_eth -= event["args"]["token_amounts"][0]
-                    withdrawn_crv -= event["args"]["token_amounts"][1]
+                        withdrawn_crv += event["args"]["coin_amount"]
 
         user_balances.append(
             {
@@ -115,8 +112,8 @@ for user in user_balances:
             user["events"],
             user["withdrawn_eth"],
             user["withdrawn_crv"],
-            user["balance"] * eth_per_lp - user["withdrawn_eth"],
-            user["balance"] * crv_per_lp - user["withdrawn_crv"],
+            int(user["balance"] * eth_per_lp - user["withdrawn_eth"]),
+            int(user["balance"] * crv_per_lp - user["withdrawn_crv"]),
         ]
     )
 
