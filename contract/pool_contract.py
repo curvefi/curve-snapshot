@@ -180,3 +180,27 @@ class AlEthPoolContract(PoolContract):
                 "type": "event",
             },
         ]
+
+
+class AlEthStakedPools(Contract):
+    @property
+    def abi(self) -> list[dict]:
+        return [
+            {
+                "inputs": [
+                    {"internalType": "address", "name": "_account", "type": "address"},
+                    {"internalType": "uint256", "name": "_poolId", "type": "uint256"},
+                ],
+                "name": "getStakeTotalDeposited",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function",
+            }
+        ]
+
+    def get_user_balance(
+        self, user: str, pool_id: int, block_identifier: BlockIdentifier = "latest"
+    ) -> int:
+        return self.contract.functions.getStakeTotalDeposited(user, pool_id).call(
+            block_identifier=block_identifier
+        )
