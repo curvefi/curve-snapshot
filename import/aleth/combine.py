@@ -13,7 +13,22 @@ exclude = [
     "0xAB8e74017a8Cc7c15FFcCd726603790d26d7DeCa",  # alch old
 ]
 
-balances = []
+contract_types = {
+    "0xC53127AF77cBa7D07DC08e271bD0826c55f97467": "multisig",
+    "0x3bCF3Db69897125Aa61496Fc8a8B55A5e3f245d5": "multisig",
+    "0x27bE856E8B8d24220E53B933e29D46A477858cE7": "multisig",
+    "0x01C9B838BE2c60181cef4Be3160d6F44daEe0a99": "convex strategy proxy",
+    "0xD5bA79D098679730CbF45d4CFcf52aAD5aC8bC8E": "numisme convex strategy",
+    "0xc0BCA9516a8cdF027D20dE68821E781B381C2CbA": "yAxis convex strategy",
+    "0x93A62dA5a14C80f265DAbC077fCEE437B1a0Efde": "yearn treasury vault",
+    "0x41267Fe98489fb8437dd2Eddf4484FbA140ffDfc": "Yieldster vault",
+    "0xaBb8B277F49de499b902A1E09A2aCA727595b544": "multisig",
+    "0xc5C5D181a08e4F127ADA2d3BE2636e206D7aAf24": "unknown convex strategy",
+    "0x3222D0Ab7626f4F9Bc9f1070CE1dE322B481bDA5": "Enso wallet proxy",
+    "0xb634316E06cC0B358437CbadD4dC94F1D3a92B3b": "Trade Handler"
+}
+
+balances = {}
 
 sum_ = 0
 
@@ -53,12 +68,27 @@ for file in [
                 if lp_minus_withdrawn < 0:
                     lp_minus_withdrawn = 0
 
-                balances.append(row[:2] + [str(lp_minus_withdrawn)] + row[2:])
+                user = row[0]
+                if user not in balances:
+                    balances[user] = [row[0], int(row[1])] + [str(lp_minus_withdrawn)] + row[2:]
+                else:
+                    balances[user][1] = int(balances[user][1]) + int(row[1])
+                    balances[user][2] = str(int(balances[user][2]) + lp_minus_withdrawn)
+                    balances[user][6] = int(balances[user][6]) + int(row[5])
+                    balances[user][7] = int(balances[user][7]) + int(row[6])
+                    balances[user][8] = int(balances[user][8]) + int(row[7])
+                    balances[user][9] = int(balances[user][9]) + int(row[8])
                 sum_ += int(row[1])
 
 print(f"Sum of lp of users: {sum_}, total from pool = 24763590359241671361762")
 
-balances = sorted(balances, key=lambda x: int(x[1]), reverse=True)
+balances = sorted(balances.values(), key=lambda x: int(x[1]), reverse=True)
+
+for balance in balances:
+    if balance[0] in contract_types:
+        balance[4] = contract_types[balance[0]]
+
+print(f"Sum check: {sum([x[1] for x in balances])}")
 balances = [
     [
         "User",
