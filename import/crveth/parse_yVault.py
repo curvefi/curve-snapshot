@@ -18,7 +18,7 @@ yearn_contract = YERC20Contract(yearn_addr)
 pool = "0x8301AE4fc9c624d1D396cbDAa1ed877821D7C511"
 pool_contract = PoolContract(pool)
 yearn_vault_addr = "0x3DD9636CA2b554cCCd219d73796e80d819c90CBa"
-yearn_vault_token_addr = "0x6f0Ace0F94f4B9890Dfa99A4175B3Ef0288C16B3"
+yearn_vault_token_addr = "0x6A5468752f8DB94134B6508dAbAC54D3b45efCE6"
 yearn_vault = YERC20Contract(yearn_vault_token_addr)
 start_block = 13676983
 block = 17807829
@@ -26,6 +26,9 @@ web3 = Web3(web3_provider)
 
 
 current_block = json.loads(Web3.to_json(web3.eth.get_block("latest")))["number"]
+
+total_assets = yearn_vault.totalAssets(block_identifier=block)
+print(total_assets)
 
 
 lp_total_supply = lp_contract.total_supply(block_identifier=block)
@@ -47,7 +50,7 @@ eth_per_lp, crv_per_lp = (
 )
 
 users = []
-with open(Path(BASE_DIR, "data", "crveth", "all_users.csv"), "r") as file:
+with open(Path(BASE_DIR, "data", "crveth", "all_users_yvault.csv"), "r") as file:
     reader = csv.reader(file)
     for row in reader:
         users.append(row[0])

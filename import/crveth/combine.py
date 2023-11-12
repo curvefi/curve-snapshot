@@ -11,12 +11,12 @@ exclude = [
     "0x3Cf54F3A1969be9916DAD548f3C084331C4450b5",  # concentrator
     "0x4e626f8Cf7529EE986a6825A7F8fB929DB740d96",  # beefy
     "0x5D77b731803916cbcdec2BBdb3Ad0649C6a6EA17",  # Bent
+    "0x3DD9636CA2b554cCCd219d73796e80d819c90CBa",  # yearn strategy router - Vault
 ]
 
 contract_types = {
     "0x4bfb33d65f4167EBE190145939479227E7bf2CB0": "multisig",
     "0x942d484C008d86C92d62fce9Cbdf010f89d4F899": "multisig",
-    "0x3DD9636CA2b554cCCd219d73796e80d819c90CBa": "yearn strategy router",
     "0x2d0aba145D6A0c071CfF3bD87CC4b8475413D895": "multisig",
     "0xc7599b60f05639f93D26e58d56D90C526A6e7575": "multisig",
     "0x506Eb3dc29389cEA11768cCe6a01Fca4996Fa30c": "convex strategy proxy",
@@ -68,6 +68,7 @@ for file in [
     "concentrator_snapshot.csv",
     "beefy_snapshot.csv",
     "bent_snapshot.csv",
+    "yvault_snapshot.csv",
 ]:
     with open(Path(BASE_DIR, "data", "crveth", file), "r") as file:
         reader = csv.reader(file)

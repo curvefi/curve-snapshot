@@ -121,11 +121,18 @@ class YERC20Contract(ERC20Contract):
                 "name": "pricePerShare",
                 "inputs": [],
                 "outputs": [{"name": "", "type": "uint256"}],
-            }
+            },
+            {"stateMutability": "view", "type": "function", "name": "totalAssets", "inputs": [],
+             "outputs": [{"name": "", "type": "uint256"}]}
         ]
 
     def pricePerShare(self, block_identifier: BlockIdentifier = "latest") -> int:
         return self.contract.functions.pricePerShare().call(
+            block_identifier=block_identifier
+        )
+
+    def totalAssets(self, block_identifier: BlockIdentifier = "latest") -> int:
+        return self.contract.functions.totalAssets().call(
             block_identifier=block_identifier
         )
 
