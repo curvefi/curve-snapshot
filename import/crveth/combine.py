@@ -78,24 +78,32 @@ for file in [
                 is_first = False
                 continue
             if row[0] not in exclude:
-                lp_minus_withdrawn = (
-                    int(row[1])
-                    - int(int(row[5]) / eth_per_lp / 2)
-                    - int(int(row[6]) / crv_per_lp / 2)
-                )
-                if lp_minus_withdrawn < 0:
-                    lp_minus_withdrawn = 0
-
                 user = row[0]
                 if user not in balances:
+                    lp_minus_withdrawn = (
+                            int(row[1])
+                            - int(int(row[5]) / eth_per_lp / 2)
+                            - int(int(row[6]) / crv_per_lp / 2)
+                    )
+                    if lp_minus_withdrawn < 0:
+                        lp_minus_withdrawn = 0
+
                     balances[user] = [row[0], int(row[1])] + [str(lp_minus_withdrawn)] + row[2:]
                 else:
+                    lp_minus_withdrawn = (
+                            int(balances[user][1]) + int(row[1])
+                            - int(int(row[5]) / eth_per_lp / 2)
+                            - int(int(row[6]) / crv_per_lp / 2)
+                    )
+                    if lp_minus_withdrawn < 0:
+                        lp_minus_withdrawn = 0
+
                     balances[user][1] = int(balances[user][1]) + int(row[1])
-                    balances[user][2] = str(int(balances[user][2]) + lp_minus_withdrawn)
+                    balances[user][2] = str(lp_minus_withdrawn)
                     balances[user][6] = int(balances[user][6]) + int(row[5])
                     balances[user][7] = int(balances[user][7]) + int(row[6])
-                    balances[user][8] = int(balances[user][8]) + int(row[7])
-                    balances[user][9] = int(balances[user][9]) + int(row[8])
+                    balances[user][8] = int(balances[user][8]) + int(row[7]) + int(row[5])  # withdrawn already applied
+                    balances[user][9] = int(balances[user][9]) + int(row[8]) + int(int(row[6]))
                 sum_ += int(row[1])
 
 print(f"Sum of lp of users: {sum_}, total from pool = 550348187166762515331352")
