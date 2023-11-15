@@ -82,8 +82,6 @@ for file in [
 
                     balances[user][1] = int(balances[user][1]) + int(row[1])
                     balances[user][2] = str(lp_minus_withdrawn)
-                    balances[user][6] = int(balances[user][6]) + int(row[5])
-                    balances[user][7] = int(balances[user][7]) + int(row[6])
                     balances[user][8] = int(balances[user][8]) + int(row[7]) + int(row[5])  # withdrawn already applied
                     balances[user][9] = int(balances[user][9]) + int(row[8]) + int(int(row[6]))
                 sum_ += int(row[1])
