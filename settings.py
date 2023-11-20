@@ -35,7 +35,7 @@ class Settings(BaseSettings):
         "0x70CCBE10F980d80b7eBaab7D2E3A73e87D67B775": "gitcoin grants",
         "0x114777cA6c3967ddEe23523B775e1d1f385D7Deb": "multisig",
         "0xeCb456EA5365865EbAb8a2661B0c503410e9B347": "pool owner",
-        "0xd1DE3F9CD4AE2F23DA941a67cA4C739f8dD9Af33": "multisig"
+        "0xd1DE3F9CD4AE2F23DA941a67cA4C739f8dD9Af33": "multisig",
     }
 
 

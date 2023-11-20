@@ -25,7 +25,7 @@ contract_types = {
     "0xaBb8B277F49de499b902A1E09A2aCA727595b544": "multisig",
     "0xc5C5D181a08e4F127ADA2d3BE2636e206D7aAf24": "unknown convex strategy",
     "0x3222D0Ab7626f4F9Bc9f1070CE1dE322B481bDA5": "Enso wallet proxy",
-    "0xb634316E06cC0B358437CbadD4dC94F1D3a92B3b": "Trade Handler"
+    "0xb634316E06cC0B358437CbadD4dC94F1D3a92B3b": "Trade Handler",
 }
 
 balances = {}
@@ -63,27 +63,34 @@ for file in [
                 user = row[0]
                 if user not in balances:
                     lp_minus_withdrawn = (
-                            int(row[1])
-                            - int(int(row[5]) / eth_per_lp / 2)
-                            - int(int(row[6]) / aleth_per_lp / 2)
+                        int(row[1])
+                        - int(int(row[5]) / eth_per_lp / 2)
+                        - int(int(row[6]) / aleth_per_lp / 2)
                     )
                     if lp_minus_withdrawn < 0:
                         lp_minus_withdrawn = 0
 
-                    balances[user] = [row[0], int(row[1])] + [str(lp_minus_withdrawn)] + row[2:]
+                    balances[user] = (
+                        [row[0], int(row[1])] + [str(lp_minus_withdrawn)] + row[2:]
+                    )
                 else:
                     lp_minus_withdrawn = (
-                            int(balances[user][1]) + int(row[1])
-                            - int(int(row[5]) / eth_per_lp / 2)
-                            - int(int(row[6]) / aleth_per_lp / 2)
+                        int(balances[user][1])
+                        + int(row[1])
+                        - int(int(row[5]) / eth_per_lp / 2)
+                        - int(int(row[6]) / aleth_per_lp / 2)
                     )
                     if lp_minus_withdrawn < 0:
                         lp_minus_withdrawn = 0
 
                     balances[user][1] = int(balances[user][1]) + int(row[1])
                     balances[user][2] = str(lp_minus_withdrawn)
-                    balances[user][8] = int(balances[user][8]) + int(row[7]) + int(row[5])  # withdrawn already applied
-                    balances[user][9] = int(balances[user][9]) + int(row[8]) + int(int(row[6]))
+                    balances[user][8] = (
+                        int(balances[user][8]) + int(row[7]) + int(row[5])
+                    )  # withdrawn already applied
+                    balances[user][9] = (
+                        int(balances[user][9]) + int(row[8]) + int(int(row[6]))
+                    )
                 sum_ += int(row[1])
 
 print(f"Sum of lp of users: {sum_}, total from pool = 24763590359241671361762")

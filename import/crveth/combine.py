@@ -12,6 +12,8 @@ exclude = [
     "0x4e626f8Cf7529EE986a6825A7F8fB929DB740d96",  # beefy
     "0x5D77b731803916cbcdec2BBdb3Ad0649C6a6EA17",  # Bent
     "0x3DD9636CA2b554cCCd219d73796e80d819c90CBa",  # yearn strategy router - Vault
+    "0xd7b17297B9884Aa73BF5E6e39e3cEC107ffe6b17",  # FARM
+    "0x506Eb3dc29389cEA11768cCe6a01Fca4996Fa30c",  # FARM Convex Strategy
 ]
 
 contract_types = {
@@ -41,7 +43,7 @@ contract_types = {
     "0xcADBA199F3AC26F67f660C89d43eB1820b7f7a3b": "yearn Trade Handler",
     "0x73152648E3C7FefebCdE692AF55d972702916623": "multisig",
     "0x0962a706770388f62670E8b5a7891863d0D92E85": "multisig",
-    "0x70ed999E2849A3C85EB4a6288B90c7ecA7b807F4": "Portals.fi"
+    "0x70ed999E2849A3C85EB4a6288B90c7ecA7b807F4": "Portals.fi",
 }
 
 balances = {}
@@ -69,6 +71,7 @@ for file in [
     "beefy_snapshot.csv",
     "bent_snapshot.csv",
     "yvault_snapshot.csv",
+    "farm_snapshot.csv",
 ]:
     with open(Path(BASE_DIR, "data", "crveth", file), "r") as file:
         reader = csv.reader(file)
@@ -81,27 +84,34 @@ for file in [
                 user = row[0]
                 if user not in balances:
                     lp_minus_withdrawn = (
-                            int(row[1])
-                            - int(int(row[5]) / eth_per_lp / 2)
-                            - int(int(row[6]) / crv_per_lp / 2)
+                        int(row[1])
+                        - int(int(row[5]) / eth_per_lp / 2)
+                        - int(int(row[6]) / crv_per_lp / 2)
                     )
                     if lp_minus_withdrawn < 0:
                         lp_minus_withdrawn = 0
 
-                    balances[user] = [row[0], int(row[1])] + [str(lp_minus_withdrawn)] + row[2:]
+                    balances[user] = (
+                        [row[0], int(row[1])] + [str(lp_minus_withdrawn)] + row[2:]
+                    )
                 else:
                     lp_minus_withdrawn = (
-                            int(balances[user][1]) + int(row[1])
-                            - int(int(row[5]) / eth_per_lp / 2)
-                            - int(int(row[6]) / crv_per_lp / 2)
+                        int(balances[user][1])
+                        + int(row[1])
+                        - int(int(row[5]) / eth_per_lp / 2)
+                        - int(int(row[6]) / crv_per_lp / 2)
                     )
                     if lp_minus_withdrawn < 0:
                         lp_minus_withdrawn = 0
 
                     balances[user][1] = int(balances[user][1]) + int(row[1])
                     balances[user][2] = str(lp_minus_withdrawn)
-                    balances[user][8] = int(balances[user][8]) + int(row[7]) + int(row[5])  # withdrawn already applied
-                    balances[user][9] = int(balances[user][9]) + int(row[8]) + int(int(row[6]))
+                    balances[user][8] = (
+                        int(balances[user][8]) + int(row[7]) + int(row[5])
+                    )  # withdrawn already applied
+                    balances[user][9] = (
+                        int(balances[user][9]) + int(row[8]) + int(int(row[6]))
+                    )
                 sum_ += int(row[1])
 
 print(f"Sum of lp of users: {sum_}, total from pool = 550348187166762515331352")

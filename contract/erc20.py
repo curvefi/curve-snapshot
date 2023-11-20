@@ -122,8 +122,13 @@ class YERC20Contract(ERC20Contract):
                 "inputs": [],
                 "outputs": [{"name": "", "type": "uint256"}],
             },
-            {"stateMutability": "view", "type": "function", "name": "totalAssets", "inputs": [],
-             "outputs": [{"name": "", "type": "uint256"}]}
+            {
+                "stateMutability": "view",
+                "type": "function",
+                "name": "totalAssets",
+                "inputs": [],
+                "outputs": [{"name": "", "type": "uint256"}],
+            },
         ]
 
     def pricePerShare(self, block_identifier: BlockIdentifier = "latest") -> int:
@@ -254,3 +259,24 @@ class ConcERC20Contract(Contract):
                 argument_filters=argument_filters, fromBlock=fromBlock, toBlock=toBlock
             )
         )
+
+
+class FarmERC20Contract(BeefyERC20Contract):
+    @property
+    def abi(self) -> list[dict]:
+        return super().abi + [
+            {
+                "stateMutability": "view",
+                "type": "function",
+                "name": "underlyingBalanceWithInvestmentForHolder",
+                "inputs": [{"name": "holder", "type": "address"}],
+                "outputs": [{"name": "", "type": "uint256"}],
+            },
+        ]
+
+    def underlyingBalanceWithInvestmentForHolder(
+        self, user: str, block_identifier: BlockIdentifier = "latest"
+    ) -> int:
+        return self.contract.functions.underlyingBalanceWithInvestmentForHolder(
+            user
+        ).call(block_identifier=block_identifier)
