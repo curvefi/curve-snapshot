@@ -17,7 +17,7 @@ pool_contract = AlEthPoolContract(pool)
 beefy_address = "0xbc0cF20Ac9Fc670fED9B3f230F2E8A2676451e37"
 beefy_contract = BeefyERC20Contract(beefy_address)
 start_block = 13227441
-block = 17806740
+block = 17806742
 web3 = Web3(web3_provider)
 
 beefy = "0x35a9384473b7581Fbf5c0edBaa7831C1Ab65bdB5"

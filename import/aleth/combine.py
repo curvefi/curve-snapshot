@@ -1,7 +1,11 @@
 import csv
 from pathlib import Path
 
+from contract.erc20 import ERC20Contract
 from settings import BASE_DIR
+
+lp = "0xC4C319E2D4d66CcA4464C0c2B32c9Bd23ebe784e"
+lp_contract = ERC20Contract(lp)
 
 exclude = [
     "0x12dCD9E8D1577b5E4F066d8e7D404404Ef045342",  # gauge
@@ -93,7 +97,9 @@ for file in [
                     )
                 sum_ += int(row[1])
 
-print(f"Sum of lp of users: {sum_}, total from pool = 24763590359241671361762")
+print(
+    f"Sum of lp of users: {sum_}, total from pool = {lp_contract.total_supply(block_identifier=17806742)}"
+)
 
 balances = sorted(balances.values(), key=lambda x: int(x[1]), reverse=True)
 

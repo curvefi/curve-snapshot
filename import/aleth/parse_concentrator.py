@@ -19,7 +19,7 @@ convex_contract = ERC20Contract(convex_addr)
 conc_addr = "0x3Cf54F3A1969be9916DAD548f3C084331C4450b5"
 conc_contract = ConcERC20Contract(conc_addr)
 start_block = 13227441
-block = 17806740
+block = 17806742
 web3 = Web3(web3_provider)
 
 concentrator = "0x3Cf54F3A1969be9916DAD548f3C084331C4450b5"

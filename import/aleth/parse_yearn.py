@@ -17,7 +17,7 @@ pool_contract = AlEthPoolContract(pool)
 yearn_addr = "0x718AbE90777F5B778B52D553a5aBaa148DD0dc5D"
 yearn_contract = YERC20Contract(yearn_addr)
 start_block = 13227441
-block = 17806740
+block = 17806742
 web3 = Web3(web3_provider)
 
 yearn = "0x718AbE90777F5B778B52D553a5aBaa148DD0dc5D"

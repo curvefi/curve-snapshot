@@ -55,7 +55,10 @@ for user in users:
         balance = farm_contract.underlyingBalanceWithInvestmentForHolder(
             user, block_identifier=block
         )
-        balance_vault = int(farm_vault_contract.balanceOf(user, block_identifier=block) * price_per_share)
+        balance_vault = int(
+            farm_vault_contract.balanceOf(user, block_identifier=block)
+            * price_per_share
+        )
 
     else:
         continue

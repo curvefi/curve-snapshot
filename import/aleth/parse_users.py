@@ -12,7 +12,7 @@ lp_contract = ERC20Contract(lp)
 gauge = "0x12dCD9E8D1577b5E4F066d8e7D404404Ef045342"
 gauge_contract = ERC20Contract(gauge)
 start_block = 13227441
-block = 17806740
+block = 17806742
 web3 = Web3(web3_provider)
 
 

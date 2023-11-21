@@ -8,7 +8,7 @@ Snapshot is taken for block 17807829
 
 ## alETH/ETH
 
-Snapshot is taken for block 17806740
+Snapshot is taken for block 17806742
 
 ## msETH/ETH
 

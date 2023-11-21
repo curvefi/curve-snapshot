@@ -17,7 +17,7 @@ pool_contract = AlEthPoolContract(pool)
 convex_addr = "0x48Bc302d8295FeA1f8c3e7F57D4dDC9981FEE410"
 convex_contract = ERC20Contract(convex_addr)
 start_block = 13227441
-block = 17806740
+block = 17806742
 web3 = Web3(web3_provider)
 
 convex = "0x989AEb4d175e16225E39E87d0D97A3360524AD80"

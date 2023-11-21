@@ -8,7 +8,6 @@ from contract.erc20 import ERC20Contract, YERC20Contract
 from contract.pool_contract import PoolContract
 from settings import BASE_DIR, settings, web3_provider
 
-
 lp = "0xEd4064f376cB8d68F770FB1Ff088a3d0F3FF5c4d"
 lp_contract = ERC20Contract(lp)
 gauge = "0x1cEBdB0856dd985fAe9b8fEa2262469360B8a3a6"

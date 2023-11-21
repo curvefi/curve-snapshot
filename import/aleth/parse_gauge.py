@@ -15,7 +15,7 @@ gauge_contract = ERC20Contract(gauge)
 pool = "0xC4C319E2D4d66CcA4464C0c2B32c9Bd23ebe784e"
 pool_contract = AlEthPoolContract(pool)
 start_block = 13227441
-block = 17806740
+block = 17806742
 web3 = Web3(web3_provider)
 
 

@@ -15,7 +15,7 @@ pool_contract = AlEthPoolContract(pool)
 alch_addr = "0xAB8e74017a8Cc7c15FFcCd726603790d26d7DeCa"
 alch_contract = AlEthStakedPools(alch_addr)
 start_block = 13227441
-block = 17806740
+block = 17806742
 web3 = Web3(web3_provider)
 
 current_block = json.loads(Web3.to_json(web3.eth.get_block("latest")))["number"]
