@@ -36,6 +36,12 @@ types = {
 current_prices = {"crveth": 0.5581 / 1888}
 # First coin is always ETH or WETH
 
+replaced_addresses = {
+    "0x562C0bc16A7BBe9Fb73902694D3AF8cb24Aa3768": "0x2ECd81E43C1F66185446F4af7DfEAa6AAE249f55",
+    "0x01C9B838BE2c60181cef4Be3160d6F44daEe0a99": "0x1F020A4943EB57cd3b2213A66b355CB662Ea43C3",
+    "0xe761bf731A06fE8259FeE05897B2687D56933110": "0x9e2b6378ee8ad2A4A95Fe481d63CAba8FB0EBBF9",
+}
+
 
 def main():
     for name, address, block, fname, pool_type in POOLS:
@@ -52,11 +58,11 @@ def main():
         df = pd.read_csv("data/" + fname, dtype=types)
 
         df = df[
-            (df["contract_type"] == "multisig") | (df["is_contract"] == False)
+            (df["contract_type"] == "multisig") | (df["is_contract"] == False | df["User"] in replaced_addresses)
         ]  # noqa
 
         new_df = pd.DataFrame()
-        new_df["User"] = df["User"]
+        new_df["User"] = df["User"] if df["User"] not in replaced_addresses else replaced_addresses[df["User"]]
         new_df["ETH before hack"] = df["LP Balance"] / supply * balances[0] / 1e18
         new_df["%s before hack" % coin1_name] = (
             df["LP Balance"] / supply * balances[1] / 1e18
@@ -64,7 +70,7 @@ def main():
         new_df["% not recovered by user"] = (
             df["LP Balance - withdrawn"] / df["LP Balance"] * 100
         )
-        new_df["is_multisig"] = df["contract_type"] == "multisig"
+        new_df["is_multisig"] = df["contract_type"] == "multisig" or df["User"] in replaced_addresses
 
         if pool_type == 1:  # Stableswap
             new_df["ETH to recover"] = (
