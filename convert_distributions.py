@@ -1,5 +1,4 @@
 #!/usr/bin/enb python3
-import IPython  # noqa
 import pandas as pd
 from brownie import Contract, config
 
