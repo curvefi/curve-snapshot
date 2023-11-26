@@ -33,7 +33,7 @@ types = {
     "LP Balance - withdrawn": float,
     "is_contract": bool,
 }
-current_prices = {"crveth": 0.5581 / 1888}
+current_prices = {"crveth": 0.5993 / 2085}
 # First coin is always ETH or WETH
 
 replaced_addresses = {
@@ -57,12 +57,17 @@ def main():
 
         df = pd.read_csv("data/" + fname, dtype=types)
 
+        for from_addr, to_addr in replaced_addresses.items():
+            cond = df["User"] == from_addr
+            df.loc[cond, "contract_type"] = "multisig"
+            df.loc[cond, "User"] = to_addr
+
         df = df[
-            (df["contract_type"] == "multisig") | (df["is_contract"] == False | df["User"] in replaced_addresses)
-        ]  # noqa
+            (df["contract_type"] == "multisig") | (df["is_contract"] == False)  # noqa
+        ]
 
         new_df = pd.DataFrame()
-        new_df["User"] = df["User"] if df["User"] not in replaced_addresses else replaced_addresses[df["User"]]
+        new_df["User"] = df["User"]
         new_df["ETH before hack"] = df["LP Balance"] / supply * balances[0] / 1e18
         new_df["%s before hack" % coin1_name] = (
             df["LP Balance"] / supply * balances[1] / 1e18
@@ -70,7 +75,7 @@ def main():
         new_df["% not recovered by user"] = (
             df["LP Balance - withdrawn"] / df["LP Balance"] * 100
         )
-        new_df["is_multisig"] = df["contract_type"] == "multisig" or df["User"] in replaced_addresses
+        new_df["is_multisig"] = df["contract_type"] == "multisig"
 
         if pool_type == 1:  # Stableswap
             new_df["ETH to recover"] = (
@@ -88,7 +93,7 @@ def main():
             )
             new_df["Missed rewards in %s" % coin1_name] = (
                 0.12
-                * 3.5
+                * 4
                 / 12
                 * (new_coin1 * 2)
                 * df["LP Balance - withdrawn"]
