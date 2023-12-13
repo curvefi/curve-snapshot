@@ -33,7 +33,7 @@ types = {
     "LP Balance - withdrawn": float,
     "is_contract": bool,
 }
-current_prices = {"crveth": 0.5993 / 2085}
+current_prices = {"crveth": 0.62686 / 2204}
 # First coin is always ETH or WETH
 
 replaced_addresses = {
