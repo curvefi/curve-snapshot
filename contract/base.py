@@ -8,8 +8,8 @@ from settings import web3_provider
 
 
 class Contract(ABC):
-    def __init__(self, address: str):
-        self.web3 = Web3(web3_provider)
+    def __init__(self, address: str, provider: Web3.HTTPProvider = web3_provider):
+        self.web3 = Web3(provider)
         self.address = address
 
     @property

@@ -13,3 +13,9 @@ Snapshot is taken for block 17806742
 ## msETH/ETH
 
 Snapshot is taken for block 17806549
+
+
+## Arbitrum deBridge-ETH
+
+0x0a824B5d4C96EA0EC46306Efbd34Bf88fE1277e0
+Snapshot is taken for block 116468639
