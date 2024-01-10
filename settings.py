@@ -14,6 +14,7 @@ class Settings(BaseSettings):
 
     WEB3_PROVIDER_URL: str = "http://localhost:8545"
     ARBITRUM_WEB3_PROVIDER_URL: str = "http://localhost:8545"
+    FANTOM_WEB3_PROVIDER_URL: str = "http://localhost:8545"
 
     contract_names: dict[str, str] = {
         "0x1cEBdB0856dd985fAe9b8fEa2262469360B8a3a6": "gauge",
@@ -43,4 +44,5 @@ class Settings(BaseSettings):
 settings = Settings()
 web3_provider = Web3.HTTPProvider(settings.WEB3_PROVIDER_URL)
 arbi_web3_provider = Web3.HTTPProvider(settings.ARBITRUM_WEB3_PROVIDER_URL)
+fantom_web3_provider = Web3.HTTPProvider(settings.FANTOM_WEB3_PROVIDER_URL)
 async_web3_provider = Web3.AsyncHTTPProvider(settings.WEB3_PROVIDER_URL)
